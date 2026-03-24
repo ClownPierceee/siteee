@@ -1,0 +1,422 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IT Career Navigator</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --ink: #0a0f1e;
+    --ink2: #1a2540;
+    --accent: #0d6efd;
+    --accent2: #00c4a3;
+    --accent3: #ff6b35;
+    --muted: #5a6a8a;
+    --border: rgba(13,110,253,0.15);
+    --font: 'Space Grotesk', sans-serif;
+    --mono: 'JetBrains Mono', monospace;
+    --r: 12px;
+    --shadow: 0 4px 32px rgba(13,110,253,0.10);
+  }
+  html { scroll-behavior: smooth; }
+  body { font-family: var(--font); background: var(--ink); color: #e8edf7; line-height: 1.6; overflow-x: hidden; }
+
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 5vw; height: 64px;
+    background: rgba(10,15,30,0.88); backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo { font-family: var(--mono); font-size: 1rem; font-weight: 600; color: var(--accent2); letter-spacing: -0.02em; }
+  .nav-logo span { color: var(--accent); }
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a { color: #9bb0d4; text-decoration: none; font-size: 0.875rem; font-weight: 500; transition: color .2s; }
+  .nav-links a:hover { color: var(--accent2); }
+
+  #hero {
+    min-height: 100vh; display: flex; align-items: center;
+    padding: 96px 5vw 64px; position: relative; overflow: hidden;
+  }
+  .hero-grid {
+    position: absolute; inset: 0; opacity: 0.04;
+    background-image: linear-gradient(rgba(13,110,253,.5) 1px, transparent 1px), linear-gradient(90deg, rgba(13,110,253,.5) 1px, transparent 1px);
+    background-size: 48px 48px;
+  }
+  .hero-glow { position: absolute; width: 700px; height: 700px; background: radial-gradient(circle, rgba(0,196,163,0.12) 0%, transparent 70%); top: -200px; right: -100px; pointer-events: none; }
+  .hero-glow2 { position: absolute; width: 600px; height: 600px; background: radial-gradient(circle, rgba(13,110,253,0.10) 0%, transparent 70%); bottom: -200px; left: -100px; pointer-events: none; }
+  .hero-content { max-width: 760px; position: relative; }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(0,196,163,0.1); border: 1px solid rgba(0,196,163,0.3);
+    border-radius: 999px; padding: 6px 16px;
+    font-size: 0.8rem; font-family: var(--mono); color: var(--accent2);
+    margin-bottom: 2rem; letter-spacing: 0.05em;
+  }
+  .hero-badge::before { content: '▶'; font-size: 0.6rem; }
+  h1 { font-size: clamp(2.5rem, 6vw, 4.5rem); font-weight: 700; line-height: 1.05; letter-spacing: -0.03em; margin-bottom: 1.5rem; }
+  h1 em {
+    font-style: normal;
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .hero-sub { font-size: 1.125rem; color: #9bb0d4; max-width: 540px; margin-bottom: 2.5rem; line-height: 1.7; }
+  .hero-ctas { display: flex; gap: 1rem; flex-wrap: wrap; }
+  .btn { display: inline-flex; align-items: center; gap: 8px; padding: 14px 28px; border-radius: var(--r); font-size: 0.9rem; font-weight: 600; font-family: var(--font); text-decoration: none; transition: all .2s; cursor: pointer; border: none; }
+  .btn-primary { background: var(--accent); color: #fff; }
+  .btn-primary:hover { background: #0b5ed7; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(13,110,253,0.35); }
+  .btn-ghost { background: transparent; color: var(--accent2); border: 1.5px solid rgba(0,196,163,0.4); }
+  .btn-ghost:hover { background: rgba(0,196,163,0.08); transform: translateY(-2px); }
+  .hero-stats { display: flex; gap: 3rem; margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--border); }
+  .stat-num { font-size: 2rem; font-weight: 700; font-family: var(--mono); color: var(--accent2); line-height: 1; }
+  .stat-label { font-size: 0.8rem; color: var(--muted); margin-top: 4px; letter-spacing: 0.03em; }
+
+  section { padding: 96px 5vw; }
+  .section-label { font-family: var(--mono); font-size: 0.75rem; color: var(--accent2); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 1rem; }
+  h2 { font-size: clamp(1.75rem, 3.5vw, 2.75rem); font-weight: 700; letter-spacing: -0.025em; line-height: 1.1; margin-bottom: 1rem; }
+  .section-sub { color: #9bb0d4; font-size: 1rem; max-width: 520px; margin-bottom: 3.5rem; line-height: 1.7; }
+
+  #paths { background: var(--ink2); }
+  .paths-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
+  .path-card { background: var(--ink); border: 1px solid var(--border); border-radius: 16px; padding: 2rem; transition: all .3s; position: relative; overflow: hidden; }
+  .path-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; border-radius: 16px 16px 0 0; }
+  .path-card.blue::before { background: var(--accent); }
+  .path-card.teal::before { background: var(--accent2); }
+  .path-card.orange::before { background: var(--accent3); }
+  .path-card.purple::before { background: #9b59b6; }
+  .path-card.green::before { background: #27ae60; }
+  .path-card.rose::before { background: #e91e6b; }
+  .path-card:hover { transform: translateY(-6px); border-color: rgba(13,110,253,0.4); box-shadow: var(--shadow); }
+  .path-icon { font-size: 2.25rem; margin-bottom: 1rem; }
+  .path-card h3 { font-size: 1.125rem; font-weight: 600; margin-bottom: 0.5rem; color: #e8edf7; }
+  .path-card p { font-size: 0.875rem; color: var(--muted); line-height: 1.6; margin-bottom: 1.25rem; }
+  .path-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .tag { font-size: 0.7rem; font-family: var(--mono); padding: 3px 10px; border-radius: 999px; background: rgba(13,110,253,0.12); color: #7aaeff; border: 1px solid rgba(13,110,253,0.2); }
+  .salary-range { display: inline-block; margin-top: 1rem; font-size: 0.8rem; font-weight: 600; color: var(--accent2); font-family: var(--mono); }
+
+  #roadmap { background: var(--ink); }
+  .roadmap-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+  @media (max-width: 768px) { .roadmap-grid { grid-template-columns: 1fr; } nav .nav-links { display: none; } }
+  .roadmap-panel { background: var(--ink2); border: 1px solid var(--border); border-radius: 16px; padding: 2rem; }
+  .roadmap-panel h3 { font-size: 1.1rem; font-weight: 600; color: var(--accent2); margin-bottom: 1.5rem; display: flex; align-items: center; gap: 10px; }
+  .step { display: flex; gap: 1rem; padding: 1rem 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+  .step:last-child { border-bottom: none; }
+  .step-num { width: 28px; height: 28px; border-radius: 50%; background: rgba(13,110,253,0.15); border: 1px solid rgba(13,110,253,0.3); color: var(--accent); font-size: 0.75rem; font-weight: 700; font-family: var(--mono); display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
+  .step-text strong { display: block; font-size: 0.9rem; color: #cdd7f0; margin-bottom: 3px; }
+  .step-text span { font-size: 0.8rem; color: var(--muted); }
+
+  #skills { background: var(--ink2); }
+  .skills-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 2.5rem; }
+  .skill-tab { padding: 8px 20px; border-radius: 999px; font-size: 0.85rem; font-weight: 500; cursor: pointer; transition: all .2s; border: 1.5px solid var(--border); color: var(--muted); background: transparent; font-family: var(--font); }
+  .skill-tab.active { background: var(--accent); border-color: var(--accent); color: white; }
+  .skills-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 1rem; }
+  .skill-item { background: var(--ink); border: 1px solid var(--border); border-radius: var(--r); padding: 1rem 1.25rem; transition: all .2s; }
+  .skill-item:hover { border-color: rgba(0,196,163,0.4); transform: translateY(-2px); }
+  .skill-item-name { font-size: 0.875rem; font-weight: 600; color: #cdd7f0; margin-bottom: 6px; display: flex; justify-content: space-between; align-items: center; }
+  .skill-level { font-size: 0.7rem; font-family: var(--mono); color: var(--accent2); }
+  .skill-bar { height: 3px; background: rgba(255,255,255,0.08); border-radius: 999px; overflow: hidden; }
+  .skill-bar-fill { height: 100%; border-radius: 999px; background: linear-gradient(90deg, var(--accent), var(--accent2)); }
+
+  #resources { background: var(--ink); }
+  .resources-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.25rem; }
+  .resource-card { background: var(--ink2); border: 1px solid var(--border); border-radius: var(--r); padding: 1.5rem; display: flex; flex-direction: column; gap: 0.75rem; transition: all .2s; }
+  .resource-card:hover { transform: translateY(-3px); box-shadow: var(--shadow); border-color: rgba(0,196,163,0.3); }
+  .resource-type { font-size: 0.7rem; font-family: var(--mono); letter-spacing: 0.08em; text-transform: uppercase; padding: 3px 10px; border-radius: 999px; width: fit-content; }
+  .type-free { background: rgba(39,174,96,0.15); color: #3ddc84; border: 1px solid rgba(39,174,96,0.2); }
+  .type-paid { background: rgba(255,107,53,0.15); color: #ff9a76; border: 1px solid rgba(255,107,53,0.2); }
+  .type-cert { background: rgba(155,89,182,0.15); color: #c39de8; border: 1px solid rgba(155,89,182,0.2); }
+  .resource-card h4 { font-size: 1rem; font-weight: 600; color: #dde4f4; }
+  .resource-card p { font-size: 0.82rem; color: var(--muted); line-height: 1.5; flex: 1; }
+  .resource-link { font-size: 0.8rem; color: var(--accent); font-weight: 600; font-family: var(--mono); text-decoration: none; }
+  .resource-link:hover { color: var(--accent2); }
+
+  #tips { background: var(--ink2); }
+  .tips-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; }
+  .tip-card { border-radius: 16px; padding: 2rem; border: 1px solid; transition: transform .2s; }
+  .tip-card:hover { transform: translateY(-4px); }
+  .tip-card.t1 { background: rgba(13,110,253,0.06); border-color: rgba(13,110,253,0.2); }
+  .tip-card.t2 { background: rgba(0,196,163,0.06); border-color: rgba(0,196,163,0.2); }
+  .tip-card.t3 { background: rgba(255,107,53,0.06); border-color: rgba(255,107,53,0.2); }
+  .tip-card.t4 { background: rgba(155,89,182,0.06); border-color: rgba(155,89,182,0.2); }
+  .tip-icon { font-size: 2rem; margin-bottom: 1rem; }
+  .tip-card h3 { font-size: 1.05rem; font-weight: 600; margin-bottom: 0.75rem; }
+  .tip-card p { font-size: 0.875rem; color: var(--muted); line-height: 1.65; }
+  .tip-list { margin-top: 1rem; list-style: none; }
+  .tip-list li { font-size: 0.83rem; color: #9bb0d4; padding: 4px 0 4px 1rem; position: relative; }
+  .tip-list li::before { content: '→'; position: absolute; left: 0; color: var(--accent2); font-size: 0.75rem; }
+
+  #salaries { background: var(--ink); }
+  .salary-table { width: 100%; border-collapse: collapse; background: var(--ink2); border-radius: 16px; overflow: hidden; font-size: 0.9rem; }
+  .salary-table th { padding: 14px 20px; text-align: left; font-size: 0.75rem; font-family: var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); border-bottom: 1px solid var(--border); background: rgba(0,0,0,0.3); }
+  .salary-table td { padding: 14px 20px; border-bottom: 1px solid rgba(255,255,255,0.04); color: #cdd7f0; }
+  .salary-table tr:last-child td { border-bottom: none; }
+  .salary-table tr:hover td { background: rgba(13,110,253,0.05); }
+  .salary-hi { color: var(--accent2); font-weight: 600; font-family: var(--mono); }
+  .salary-med { color: #7aaeff; font-family: var(--mono); }
+  .salary-dem { display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: 0.72rem; font-weight: 600; }
+  .dem-high { background: rgba(39,174,96,0.15); color: #3ddc84; }
+  .dem-medium { background: rgba(13,110,253,0.15); color: #7aaeff; }
+
+  #cta { text-align: center; padding: 120px 5vw; background: var(--ink2); position: relative; overflow: hidden; }
+  #cta::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at center, rgba(0,196,163,0.08) 0%, transparent 65%); }
+  #cta h2 { margin-bottom: 1rem; }
+  #cta p { color: var(--muted); max-width: 480px; margin: 0 auto 2.5rem; }
+  footer { padding: 2rem 5vw; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; color: var(--muted); flex-wrap: wrap; gap: 1rem; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo"><span>//</span> IT Career Navigator</div>
+  <ul class="nav-links">
+    <li><a href="#paths">Career Paths</a></li>
+    <li><a href="#roadmap">Roadmap</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#resources">Resources</a></li>
+    <li><a href="#tips">Job Tips</a></li>
+    <li><a href="#salaries">Salaries</a></li>
+  </ul>
+</nav>
+
+<section id="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-glow2"></div>
+  <div class="hero-content">
+    <div class="hero-badge">Your IT career starts here</div>
+    <h1>Navigate Your<br>Path Into <em>Tech</em></h1>
+    <p class="hero-sub">Discover the right IT career for you. Explore roles, build skills, find resources, and land your dream job in the tech industry.</p>
+    <div class="hero-ctas">
+      <a href="#paths" class="btn btn-primary">Explore Career Paths →</a>
+      <a href="#roadmap" class="btn btn-ghost">View Roadmaps</a>
+    </div>
+    <div class="hero-stats">
+      <div><div class="stat-num">12+</div><div class="stat-label">Career Tracks</div></div>
+      <div><div class="stat-num">$85k</div><div class="stat-label">Avg. Entry Salary</div></div>
+      <div><div class="stat-num">4M+</div><div class="stat-label">Open IT Jobs (2025)</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="paths">
+  <div class="section-label">// career tracks</div>
+  <h2>Choose Your Direction</h2>
+  <p class="section-sub">The IT industry offers a wide spectrum of roles. Find the one that matches your interests, strengths, and goals.</p>
+  <div class="paths-grid">
+    <div class="path-card blue">
+      <div class="path-icon">💻</div>
+      <h3>Software Development</h3>
+      <p>Design, build, and maintain software applications. One of the most in-demand and versatile IT roles in the world.</p>
+      <div class="path-tags"><span class="tag">Python</span><span class="tag">JavaScript</span><span class="tag">Java</span><span class="tag">APIs</span></div>
+      <div class="salary-range">$75,000 – $160,000 / yr</div>
+    </div>
+    <div class="path-card teal">
+      <div class="path-icon">🔐</div>
+      <h3>Cybersecurity</h3>
+      <p>Protect systems, networks, and data from cyber threats. One of the fastest-growing and highest-paying fields in IT.</p>
+      <div class="path-tags"><span class="tag">Ethical Hacking</span><span class="tag">SIEM</span><span class="tag">Networking</span></div>
+      <div class="salary-range">$80,000 – $180,000 / yr</div>
+    </div>
+    <div class="path-card orange">
+      <div class="path-icon">☁️</div>
+      <h3>Cloud Engineering</h3>
+      <p>Build and manage cloud infrastructure on AWS, Azure, or GCP. High demand as businesses move to the cloud.</p>
+      <div class="path-tags"><span class="tag">AWS</span><span class="tag">Terraform</span><span class="tag">Docker</span><span class="tag">Kubernetes</span></div>
+      <div class="salary-range">$90,000 – $190,000 / yr</div>
+    </div>
+    <div class="path-card purple">
+      <div class="path-icon">🤖</div>
+      <h3>AI & Machine Learning</h3>
+      <p>Create intelligent systems that learn from data. A transformative and rapidly expanding field with massive opportunity.</p>
+      <div class="path-tags"><span class="tag">Python</span><span class="tag">TensorFlow</span><span class="tag">PyTorch</span><span class="tag">LLMs</span></div>
+      <div class="salary-range">$100,000 – $220,000 / yr</div>
+    </div>
+    <div class="path-card green">
+      <div class="path-icon">📊</div>
+      <h3>Data Analytics</h3>
+      <p>Turn raw data into actionable insights. Businesses of all sizes rely on data analysts to drive decisions.</p>
+      <div class="path-tags"><span class="tag">SQL</span><span class="tag">Tableau</span><span class="tag">Excel</span><span class="tag">Power BI</span></div>
+      <div class="salary-range">$60,000 – $130,000 / yr</div>
+    </div>
+    <div class="path-card rose">
+      <div class="path-icon">🎨</div>
+      <h3>UX / UI Design</h3>
+      <p>Create intuitive and beautiful digital experiences. Bridge the gap between technology and human psychology.</p>
+      <div class="path-tags"><span class="tag">Figma</span><span class="tag">User Research</span><span class="tag">Prototyping</span></div>
+      <div class="salary-range">$65,000 – $140,000 / yr</div>
+    </div>
+  </div>
+</section>
+
+<section id="roadmap">
+  <div class="section-label">// learning roadmap</div>
+  <h2>Your Journey, Step by Step</h2>
+  <p class="section-sub">Whether you're starting from scratch or transitioning into tech, follow these roadmaps to move forward with confidence.</p>
+  <div class="roadmap-grid">
+    <div class="roadmap-panel">
+      <h3>🚀 Beginner Track — Zero to Job-Ready</h3>
+      <div class="step"><div class="step-num">1</div><div class="step-text"><strong>Choose your first programming language</strong><span>Python for data/AI · JavaScript for web development</span></div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-text"><strong>Learn the fundamentals</strong><span>Variables, loops, functions, data structures, OOP basics</span></div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-text"><strong>Build real projects</strong><span>Start small, grow to portfolio-worthy projects</span></div></div>
+      <div class="step"><div class="step-num">4</div><div class="step-text"><strong>Learn version control</strong><span>Git and GitHub — essential for every IT job</span></div></div>
+      <div class="step"><div class="step-num">5</div><div class="step-text"><strong>Get your first certification</strong><span>CompTIA IT+, AWS Cloud Practitioner, Google IT Support</span></div></div>
+      <div class="step"><div class="step-num">6</div><div class="step-text"><strong>Apply for entry-level roles</strong><span>Junior Dev, IT Support, Data Analyst, QA Tester</span></div></div>
+    </div>
+    <div class="roadmap-panel">
+      <h3>⚡ Advanced Track — Leveling Up</h3>
+      <div class="step"><div class="step-num">1</div><div class="step-text"><strong>Master your primary stack</strong><span>Deep knowledge: frameworks, tools, design patterns</span></div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-text"><strong>Expand into adjacent areas</strong><span>DevOps, Security, Cloud, ML — cross-disciplinary thinking is valued</span></div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-text"><strong>Pursue professional certifications</strong><span>AWS Solutions Architect · CISSP · Google Professional · Azure</span></div></div>
+      <div class="step"><div class="step-num">4</div><div class="step-text"><strong>Contribute to open source</strong><span>Build reputation, learn team workflows, give back</span></div></div>
+      <div class="step"><div class="step-num">5</div><div class="step-text"><strong>Build soft skills</strong><span>Communication, leadership, Agile/Scrum project management</span></div></div>
+      <div class="step"><div class="step-num">6</div><div class="step-text"><strong>Aim for senior / specialist roles</strong><span>Senior Engineer, Tech Lead, Solutions Architect, CISO</span></div></div>
+    </div>
+  </div>
+</section>
+
+<section id="skills">
+  <div class="section-label">// essential skills</div>
+  <h2>What You Need to Know</h2>
+  <p class="section-sub">The most in-demand technical skills across IT roles in 2025, ranked by employer demand.</p>
+  <div class="skills-tabs">
+    <button class="skill-tab active" onclick="filterSkills(this,'all')">All Skills</button>
+    <button class="skill-tab" onclick="filterSkills(this,'lang')">Languages</button>
+    <button class="skill-tab" onclick="filterSkills(this,'cloud')">Cloud & DevOps</button>
+    <button class="skill-tab" onclick="filterSkills(this,'data')">Data & AI</button>
+    <button class="skill-tab" onclick="filterSkills(this,'tools')">Tools</button>
+  </div>
+  <div class="skills-list" id="skills-list">
+    <div class="skill-item" data-cat="lang"><div class="skill-item-name">Python <span class="skill-level">Beginner-friendly</span></div><div class="skill-bar"><div class="skill-bar-fill" style="width:95%"></div></div></div>
+    <div class="skill-item" data-cat="lang"><div class="skill-item-name">JavaScript <span class="skill-level">Web essential</span></div><div class="skill-bar"><div class="skill-bar-fill" style="width:92%"></div></div></div>
+    <div class="skill-item" data-cat="lang"><div class="skill-item-name">SQL <span class="skill-level">Universal</span></div><div class="skill-bar"><div class="skill-bar-fill" style="width:90%"></div></div></div>
+    <div class="skill-item" data-cat="lang"><div class="skill-item-name">Java <span class="skill-level">Enterprise</span></div><div class="skill-bar"><div class="skill-bar-fill" style="width:80%"></div></div></div>
+    <div class="skill-item" data-cat="lang"><div class="skill-item-name">TypeScript <span class="skill-level">Growing fast</span></div><div class="skill-bar"><div class="skill-bar-fill" style="width:78%"></div></div></div>
+    <div class="skill-item" data-cat="cloud"><div class="skill-item-name">AWS <span class="skill-level">Market leader</span></div><div class="skill-bar"><div class="skill-bar-fill" style="width:88%"></div></div></div>
+    <div class="skill-item" data-cat="cloud"><div class="skill-item-name">Docker <span class="skill-level">Must-know</span></div><div class="skill-bar"><div class="skill-bar-fill" style="width:85%"></div></div></div>
+    <div class="skill-item" data-cat="cloud"><div class="skill-item-name">Kubernetes <span class="skill-level">Advanced</span></div><div class="skill-bar"><div class="skill-bar-fill" style="width:72%"></div></div></div>
+    <div class="skill-item" data-cat="cloud"><div class="skill-item-name">CI/CD Pipelines <span class="skill-level">DevOps core</span></div><div class="skill-bar"><div class="skill-bar-fill" style="width:75%"></div></div></div>
+    <div class="skill-item" data-cat="data"><div class="skill-item-name">Machine Learning <span class="skill-level">High demand</span></div><div class="skill-bar"><div class="skill-bar-fill" style="width:82%"></div></div></div>
+    <div class="skill-item" data-cat="data"><div class="skill-item-name">Data Visualization <span class="skill-level">Universal</span></div><div class="skill-bar"><div class="skill-bar-fill" style="width:76%"></div></div></div>
+    <div class="skill-item" data-cat="data"><div class="skill-item-name">LLM / AI APIs <span class="skill-level">2025 trend</span></div><div class="skill-bar"><div class="skill-bar-fill" style="width:89%"></div></div></div>
+    <div class="skill-item" data-cat="tools"><div class="skill-item-name">Git & GitHub <span class="skill-level">Mandatory</span></div><div class="skill-bar"><div class="skill-bar-fill" style="width:97%"></div></div></div>
+    <div class="skill-item" data-cat="tools"><div class="skill-item-name">Linux / Bash <span class="skill-level">Foundation</span></div><div class="skill-bar"><div class="skill-bar-fill" style="width:83%"></div></div></div>
+    <div class="skill-item" data-cat="tools"><div class="skill-item-name">Figma <span class="skill-level">UX/UI standard</span></div><div class="skill-bar"><div class="skill-bar-fill" style="width:70%"></div></div></div>
+    <div class="skill-item" data-cat="tools"><div class="skill-item-name">Jira / Agile <span class="skill-level">Workplace standard</span></div><div class="skill-bar"><div class="skill-bar-fill" style="width:74%"></div></div></div>
+  </div>
+</section>
+
+<section id="resources">
+  <div class="section-label">// learning resources</div>
+  <h2>Where to Learn</h2>
+  <p class="section-sub">The best platforms, courses, certifications, and communities to accelerate your IT career.</p>
+  <div class="resources-grid">
+    <div class="resource-card"><span class="resource-type type-free">Free</span><h4>freeCodeCamp</h4><p>Comprehensive free coding curriculum covering JavaScript, Python, databases, APIs, and more. Verified certificates included.</p><a href="https://freecodecamp.org" class="resource-link">freecodecamp.org →</a></div>
+    <div class="resource-card"><span class="resource-type type-free">Free</span><h4>The Odin Project</h4><p>Full-stack web development curriculum using open-source materials. Excellent community support and real-world projects.</p><a href="https://theodinproject.com" class="resource-link">theodinproject.com →</a></div>
+    <div class="resource-card"><span class="resource-type type-paid">Paid</span><h4>Udemy</h4><p>Thousands of affordable courses on every IT topic imaginable. Sales bring most courses down to under $15.</p><a href="https://udemy.com" class="resource-link">udemy.com →</a></div>
+    <div class="resource-card"><span class="resource-type type-paid">Paid</span><h4>Coursera</h4><p>University-level IT courses from Google, Meta, IBM. Many offer financial aid for learners who need it.</p><a href="https://coursera.org" class="resource-link">coursera.org →</a></div>
+    <div class="resource-card"><span class="resource-type type-cert">Certification</span><h4>AWS Training</h4><p>Official Amazon Web Services training and certification prep. AWS Cloud Practitioner is a perfect first cloud cert.</p><a href="https://aws.amazon.com/training" class="resource-link">aws.amazon.com →</a></div>
+    <div class="resource-card"><span class="resource-type type-cert">Certification</span><h4>CompTIA</h4><p>Industry-standard IT certs: A+, Network+, Security+. Globally recognized by employers of all sizes.</p><a href="https://comptia.org" class="resource-link">comptia.org →</a></div>
+    <div class="resource-card"><span class="resource-type type-free">Free</span><h4>LeetCode</h4><p>Practice coding interview problems. Widely used to prepare for technical interviews at top tech companies.</p><a href="https://leetcode.com" class="resource-link">leetcode.com →</a></div>
+    <div class="resource-card"><span class="resource-type type-free">Free</span><h4>roadmap.sh</h4><p>Community-built visual roadmaps for every major IT career path. Great for knowing what to learn and when.</p><a href="https://roadmap.sh" class="resource-link">roadmap.sh →</a></div>
+  </div>
+</section>
+
+<section id="tips">
+  <div class="section-label">// job search guide</div>
+  <h2>How to Land Your IT Job</h2>
+  <p class="section-sub">Smart strategies to stand out and succeed in the competitive IT job market.</p>
+  <div class="tips-grid">
+    <div class="tip-card t1">
+      <div class="tip-icon">🗂️</div>
+      <h3>Build a Strong Portfolio</h3>
+      <p>Your portfolio is your #1 asset. Employers want to see what you can build, not just what you claim to know.</p>
+      <ul class="tip-list">
+        <li>Host everything on GitHub — keep it active</li>
+        <li>Include 3–5 well-documented real projects</li>
+        <li>Add a personal website with live demos</li>
+        <li>Show the problem you solved, not just code</li>
+      </ul>
+    </div>
+    <div class="tip-card t2">
+      <div class="tip-icon">🔗</div>
+      <h3>Network Strategically</h3>
+      <p>Over 70% of tech jobs are filled through connections. Building your network is as important as building skills.</p>
+      <ul class="tip-list">
+        <li>Optimize your LinkedIn profile (keywords matter)</li>
+        <li>Join Discord/Slack communities in your niche</li>
+        <li>Attend local meetups and tech conferences</li>
+        <li>Engage with creators and experts in your field</li>
+      </ul>
+    </div>
+    <div class="tip-card t3">
+      <div class="tip-icon">📝</div>
+      <h3>Craft a Winning Resume</h3>
+      <p>Your resume must pass ATS scanners and impress human reviewers. Keep it focused and results-driven.</p>
+      <ul class="tip-list">
+        <li>Use keywords from the job description</li>
+        <li>Quantify achievements ("reduced load time by 40%")</li>
+        <li>Keep it to 1 page for entry-level roles</li>
+        <li>Tailor it for every application you submit</li>
+      </ul>
+    </div>
+    <div class="tip-card t4">
+      <div class="tip-icon">🎯</div>
+      <h3>Ace Technical Interviews</h3>
+      <p>Preparation is everything. Tech interviews follow a predictable structure — learn to navigate it confidently.</p>
+      <ul class="tip-list">
+        <li>Practice 50–100 LeetCode problems (Easy/Medium)</li>
+        <li>Study system design basics (for senior roles)</li>
+        <li>Prepare STAR-format behavioral answers</li>
+        <li>Always ask thoughtful questions at the end</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="salaries">
+  <div class="section-label">// salary guide 2025</div>
+  <h2>What Does IT Pay?</h2>
+  <p class="section-sub">Average annual salaries for popular IT roles in the United States. Pay varies by location, company size, and experience level.</p>
+  <table class="salary-table">
+    <thead>
+      <tr><th>Role</th><th>Entry Level</th><th>Mid-Level</th><th>Senior Level</th><th>Demand</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Software Engineer</td><td class="salary-med">$75,000</td><td class="salary-med">$115,000</td><td class="salary-hi">$160,000+</td><td><span class="salary-dem dem-high">Very High</span></td></tr>
+      <tr><td>Cloud / DevOps Engineer</td><td class="salary-med">$85,000</td><td class="salary-med">$125,000</td><td class="salary-hi">$185,000+</td><td><span class="salary-dem dem-high">Very High</span></td></tr>
+      <tr><td>AI / ML Engineer</td><td class="salary-med">$100,000</td><td class="salary-med">$145,000</td><td class="salary-hi">$220,000+</td><td><span class="salary-dem dem-high">Explosive</span></td></tr>
+      <tr><td>Cybersecurity Analyst</td><td class="salary-med">$70,000</td><td class="salary-med">$105,000</td><td class="salary-hi">$160,000+</td><td><span class="salary-dem dem-high">Very High</span></td></tr>
+      <tr><td>Data Analyst</td><td class="salary-med">$60,000</td><td class="salary-med">$90,000</td><td class="salary-hi">$125,000+</td><td><span class="salary-dem dem-high">High</span></td></tr>
+      <tr><td>UX/UI Designer</td><td class="salary-med">$58,000</td><td class="salary-med">$88,000</td><td class="salary-hi">$135,000+</td><td><span class="salary-dem dem-medium">Medium</span></td></tr>
+      <tr><td>IT Support Specialist</td><td class="salary-med">$42,000</td><td class="salary-med">$60,000</td><td class="salary-hi">$85,000+</td><td><span class="salary-dem dem-high">High</span></td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="cta">
+  <div class="section-label">// get started today</div>
+  <h2>Your Tech Career Begins Now</h2>
+  <p>The best time to start was yesterday. The second best time is today. Pick a path, take the first step, and keep going.</p>
+  <a href="#paths" class="btn btn-primary" style="display:inline-flex">Start Exploring Paths →</a>
+</section>
+
+<footer>
+  <div class="nav-logo"><span>//</span> IT Career Navigator</div>
+  <div>Built for aspiring IT professionals · Content is for educational purposes</div>
+  <div>© 2025 IT Career Navigator</div>
+</footer>
+
+<script>
+function filterSkills(btn, cat) {
+  document.querySelectorAll('.skill-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.skill-item').forEach(item => {
+    item.style.display = (cat === 'all' || item.dataset.cat === cat) ? 'block' : 'none';
+  });
+}
+</script>
+</body>
+</html>
